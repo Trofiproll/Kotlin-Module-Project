@@ -1,6 +1,6 @@
 import java.util.Scanner
 
-class Archive (unitName: String):menu(), unit{
+class Archive (unitName: String):Menu(), Unit{
     override val name: String = unitName
     override val typeString: String = "note"
 

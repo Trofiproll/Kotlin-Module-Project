@@ -1,29 +1,32 @@
 import java.util.Scanner
 
-abstract class menu{
-    val contentList = mutableListOf<unit>()
+const val EXIT = -2
+const val CREATE = -3
+const val ERR = -1
+
+abstract class Menu{
+    val contentList = mutableListOf<Unit>()
     abstract val typeString: String
 
+
+
     protected fun printContentList(){
-        if(contentList.size != 0){
-            println("\nList of ${typeString}s:")
-            var i = 1
-            for(content in contentList){
-                println("${i++}. ${content.name}")
-            }
-            println("To go to the ${typeString}, enter its number")
+        println("\nList of ${typeString}s:\n0. create")
+        var i = 1
+        for(content in contentList){
+            println("${i++}. ${content.name}")
         }
-        else println("No ${typeString}s")
-        println("To create a${if(typeString == "archive") "n" else ""} ${typeString}, enter \"create\"\nTo exit, enter \"exit\"")
+        println("$i. exit")
+        println("To move to the $typeString, enter its number, '0' or \"$i\" to create $typeString or exit")
     }
 
     protected fun input(): Int{
         val inputString = Scanner(System.`in`).nextLine()
         when(inputString.lowercase()){
-            "exit" -> return -2
-            "create" -> return -3
+            "${contentList.size+1}" -> return EXIT
+            "0" -> return CREATE
             else -> {
-                if(inputString.toIntOrNull() == null) return -1
+                if(inputString.toIntOrNull() == null) return ERR
                 return inputString.toInt()
             }
         }
@@ -33,15 +36,13 @@ abstract class menu{
 
     fun menu(){
         var input = 0
-        while(input != -2){
+        while(input != EXIT){
             printContentList()
             input = input()
             when{
                 input <= contentList.size && input > 0 -> contentList[input-1].onEnter()
-                input == -2 -> return
-                input == -3 -> {
-                    create()
-                }
+                input == EXIT -> return
+                input == CREATE -> create()
                 else -> println("Incorrect input")
             }
         }

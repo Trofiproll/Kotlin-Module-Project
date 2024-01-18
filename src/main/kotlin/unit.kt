@@ -1,4 +1,4 @@
-interface unit {
+interface Unit {
     val name: String
     fun onEnter()
 }
